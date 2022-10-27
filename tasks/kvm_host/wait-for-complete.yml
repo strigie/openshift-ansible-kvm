@@ -4,12 +4,14 @@
     src:  "{{ files.kvm }}/bare-metal/auth/kubeadmin-password"
     dest: "{{ files.base }}/conf/"
     flat: yes
+  become: yes
 
 - name: fetch kubeconfig from kvm host
   fetch:
     src:  "{{ files.kvm }}/bare-metal/auth/kubeconfig"
     dest: "{{ files.base }}/conf/"
     flat: yes
+  become: yes
 
 - name: wait-for bootstrap-complete
   command: "/root/bin/openshift-install --dir={{ files.kvm }}/bare-metal wait-for bootstrap-complete"

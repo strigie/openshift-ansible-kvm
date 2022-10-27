@@ -104,6 +104,8 @@ http {
 
     include /etc/nginx/conf.d/*.conf;
 
+    resolver 127.0.0.1;
+
     server {
         listen       8000 default_server;
         listen       [::]:8000 default_server;

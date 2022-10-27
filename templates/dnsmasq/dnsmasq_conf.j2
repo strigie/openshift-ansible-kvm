@@ -1,5 +1,4 @@
 bind-interfaces
-listen-address={{ kvm_host.ip }}
 local=/{{ net.domain }}/
 address=/apps.{{ net.subdomain }}.{{ net.domain }}/{{ kvm_host.ip }}
 {% for m in master %}

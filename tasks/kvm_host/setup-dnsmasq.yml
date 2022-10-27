@@ -2,7 +2,7 @@
 - name: send dnsmasq config to kvm host
   copy:
     src:  "{{ files.base }}/conf/dnsmasq.openshift.conf"
-    dest: /etc/dnsmasq.d/openshift.conf
+    dest: /etc/NetworkManager/dnsmasq.d/openshift.conf
     selevel: s0
     serole: object_r
     setype: dnsmasq_etc_t
@@ -17,15 +17,32 @@
     setype: net_conf_t
     seuser: system_u
 
-- name: add a new line to /etc/resolv.conf
-  lineinfile:
-    path: /etc/resolv.conf
-    firstmatch: yes
-    insertbefore: '^nameserver'
-    line: "nameserver {{ kvm_host.ip }}"
+#- name: add a new line to /etc/resolv.conf
+#  lineinfile:
+#    path: /etc/resolv.conf
+#    firstmatch: yes
+#    insertbefore: '^nameserver'
+#    line: "nameserver {{ kvm_host.ip }}"
 
-- name: (re)start dnsmasq daemon
+- name: Enable NetworkManager dnsmasq
+  copy:
+    dest: /etc/NetworkManager/conf.d/00-use-dnsmasq.conf
+    content: |
+      [main]
+      dns=dnsmasq
+
+#- name: Forward all .local to our dnsmasq
+#  copy:
+#    dest: /etc/NetworkManager/dnsmasq.d/00-homelab.conf
+#    content: |
+#      server=/local/172.16.0.1
+
+#- name: (re)start dnsmasq daemon
+#  service:
+#    name: dnsmasq
+#    state: restarted
+
+- name: restart NetworkManager
   service:
-    name: dnsmasq
+    name: NetworkManager
     state: restarted
-
